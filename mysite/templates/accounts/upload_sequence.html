@@ -1,0 +1,19 @@
+<!-- templates/accounts/upload_sequence.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>上传序列</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>上传序列</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">上传</button>
+    </form>
+    <p><a href="{% url 'profile' %}">返回用户信息管理</a></p>
+</body>
+</html>

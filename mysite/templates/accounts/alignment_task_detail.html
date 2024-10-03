@@ -1,0 +1,57 @@
+<!-- templates/accounts/alignment_task_detail.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>比对任务详情</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <h1>比对任务详情</h1>
+    <p>任务ID：{{ task.id }}</p>
+    <p>状态：{{ task.get_status_display }}</p>
+    <p>创建时间：{{ task.created_at }}</p>
+    {% if task.status == 'SUCCESS' and blast_records %}
+        <h2>比对结果</h2>
+        <p><a href="{{ task.result_file.url }}" download>下载完整结果文件</a></p>
+
+        <!-- 展示得分分布图 -->
+        {% if task.plot_file %}
+        <h3>得分分布图</h3>
+        <img src="{{ task.plot_file.url }}" alt="Score Distribution">
+        {% endif %}
+    
+        <h3>Top 10 Hits</h3>
+        <ul>
+            {% for alignment in blast_records.alignments|slice:":10" %}
+                {% for hsp in alignment.hsps %}
+                    <li>
+                        <strong>{{ alignment.title }}</strong><br>
+                        长度：{{ alignment.length }}<br>
+                        E值：{{ hsp.expect }}<br>
+                        得分：{{ hsp.score }}<br>
+                        <pre>
+Query: {{ hsp.query|slice:"0:75" }}...
+Match: {{ hsp.match|slice:"0:75" }}...
+Sbjct: {{ hsp.sbjct|slice:"0:75" }}...
+                        </pre>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% elif task.status == 'FAILURE' %}
+        <p>任务失败，请重试。</p>
+    {% else %}
+        <p>任务正在处理中，请稍后刷新页面查看结果。</p>
+    {% endif %}
+    {% if task.tree_file %}
+    <h3>进化树</h3>
+    <img src="{{ task.tree_file.url }}" alt="Phylogenetic Tree">
+    {% endif %}
+    <p><a href="{% url 'alignment_task_list' %}">返回任务列表</a></p>
+</body>
+</html>

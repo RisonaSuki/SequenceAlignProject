@@ -1,0 +1,10 @@
+workspace: ./mysite
+step 1:
+redis-runserver
+step 2:
+celery -A mysite worker -l info --pool=solo (win)
+celery -A mysite worker -l info (linux)
+step 3:
+python manage.py runserver
+step 4:
+go to 127.0.0.1 to test functions.

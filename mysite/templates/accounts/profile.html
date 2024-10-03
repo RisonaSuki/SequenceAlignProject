@@ -1,0 +1,31 @@
+<!-- templates/accounts/profile.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息管理</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>用户信息管理</h1>
+    <p>用户名：{{ user.username }}</p>
+    <p>邮箱：{{ user.email }}</p>
+    <p><a href="{% url 'upload_sequence' %}">上传新序列</a></p>
+    <h2>已上传的序列</h2>
+    {% if sequences %}
+        <ul>
+            {% for sequence in sequences %}
+                <li>{{ sequence.name }} - {{ sequence.uploaded_at }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>您还没有上传任何序列。</p>
+    {% endif %}
+
+    <p><a href="{% url 'home' %}">返回主页</a></p>
+    <p><a href="{% url 'alignment_task_list' %}">查看比对任务</a></p>
+    <p><a href="{% url 'create_alignment_task' %}">创建比对任务</a></p>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!-- templates/accounts/alignment_task_list.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>比对任务列表</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>比对任务列表</h1>
+    <p><a href="{% url 'create_alignment_task' %}">创建新任务</a></p>
+    {% if tasks %}
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    任务ID：{{ task.id }} -
+                    状态：{{ task.get_status_display }} -
+                    创建时间：{{ task.created_at }} -
+                    <a href="{% url 'alignment_task_detail' task.id %}">查看详情</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>您还没有创建任何比对任务。</p>
+    {% endif %}
+    <p><a href="{% url 'profile' %}">返回用户信息管理</a></p>
+</body>
+</html>

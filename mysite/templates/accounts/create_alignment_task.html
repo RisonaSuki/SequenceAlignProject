@@ -1,0 +1,19 @@
+<!-- templates/accounts/create_alignment_task.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>创建比对任务</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>创建比对任务</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">提交任务</button>
+    </form>
+    <p><a href="{% url 'alignment_task_list' %}">返回任务列表</a></p>
+</body>
+</html>
