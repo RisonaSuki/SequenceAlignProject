@@ -1,35 +1,34 @@
 <!-- templates/accounts/alignment_task_detail.html -->
-
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>比对任务详情</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-</head>
+{% block title %}任务详情 - 序列比对系统{% endblock %}
 
-<body>
-    <h1>比对任务详情</h1>
-    <p>任务ID：{{ task.id }}</p>
-    <p>状态：{{ task.get_status_display }}</p>
-    <p>创建时间：{{ task.created_at }}</p>
+{% block content %}
+    <h1 class="mb-4">比对任务详情</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>任务ID：</strong>{{ task.id }}</p>
+            <p><strong>状态：</strong>{{ task.get_status_display }}</p>
+            <p><strong>创建时间：</strong>{{ task.created_at }}</p>
+        </div>
+    </div>
+
     {% if task.status == 'SUCCESS' and blast_records %}
         <h2>比对结果</h2>
-        <p><a href="{{ task.result_file.url }}" download>下载完整结果文件</a></p>
+        <a href="{{ task.result_file.url }}" download class="btn btn-success mb-3">下载完整结果文件</a>
 
         <!-- 展示得分分布图 -->
         {% if task.plot_file %}
-        <h3>得分分布图</h3>
-        <img src="{{ task.plot_file.url }}" alt="Score Distribution">
+            <h3>得分分布图</h3>
+            <img src="{{ task.plot_file.url }}" alt="Score Distribution" class="img-fluid mb-4">
         {% endif %}
-    
+
         <h3>Top 10 Hits</h3>
-        <ul>
+        <ul class="list-group mb-4">
             {% for alignment in blast_records.alignments|slice:":10" %}
                 {% for hsp in alignment.hsps %}
-                    <li>
+                    <li class="list-group-item">
                         <strong>{{ alignment.title }}</strong><br>
                         长度：{{ alignment.length }}<br>
                         E值：{{ hsp.expect }}<br>
@@ -43,15 +42,18 @@ Sbjct: {{ hsp.sbjct|slice:"0:75" }}...
                 {% endfor %}
             {% endfor %}
         </ul>
+
+        {% if task.tree_file %}
+            <h3>进化树</h3>
+            <img src="{{ task.tree_file.url }}" alt="Phylogenetic Tree" class="img-fluid mb-4">
+        {% endif %}
     {% elif task.status == 'FAILURE' %}
-        <p>任务失败，请重试。</p>
+        <div class="alert alert-danger" role="alert">
+            任务失败，请重试。
+        </div>
     {% else %}
-        <p>任务正在处理中，请稍后刷新页面查看结果。</p>
+        <div class="alert alert-info" role="alert">
+            任务正在处理中，请稍后刷新页面查看结果。
+        </div>
     {% endif %}
-    {% if task.tree_file %}
-    <h3>进化树</h3>
-    <img src="{{ task.tree_file.url }}" alt="Phylogenetic Tree">
-    {% endif %}
-    <p><a href="{% url 'alignment_task_list' %}">返回任务列表</a></p>
-</body>
-</html>
+{% endblock %}

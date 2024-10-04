@@ -1,19 +1,18 @@
 <!-- templates/accounts/upload_sequence.html -->
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>上传序列</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <h1>上传序列</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">上传</button>
-    </form>
-    <p><a href="{% url 'profile' %}">返回用户信息管理</a></p>
-</body>
-</html>
+
+{% block title %}上传序列 - 序列比对系统{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">上传序列</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">上传</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
